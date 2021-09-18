@@ -4,6 +4,8 @@ describe("Tickets", () => {
     const lastName = "Vernizze";
     const fullName = `${firstName} ${lastName}`;
     const email = "carlos.vernizze@outlook.com";
+    const request = "primeira fila";
+    const ticketQtt = "2";
     const headerMessage = "TICKETBOX";
 
     beforeEach(() => 
@@ -35,14 +37,14 @@ describe("Tickets", () => {
             .get("@emailInputText")
                 .type(email)
             .get("@requestsInputText")
-                .type("primeira fila")
+                .type(request)
             .get("@signatureInputText")
                 .type(fullName));
 
     it("select two tickets", () => 
         cy
             .get("@ticketQttSelect")
-                .select("2"));
+                .select(ticketQtt));
 
     it("select 'vip' ticket type", () => 
         cy
@@ -65,7 +67,8 @@ describe("Tickets", () => {
 
     it("has 'TICKETBOX' header's heading", () => 
         cy
-            .get("@headerTicketBox").should("contain", headerMessage));
+            .get("@headerTicketBox")
+                .should("contain", headerMessage));
 
     it("alerts on invalid email", () => 
         cy
@@ -86,15 +89,15 @@ describe("Tickets", () => {
                 lastName: lastName,
                 email: email,
                 fullName: fullName,
-                request: "primeira fila",
-                ticketQtt: "2",
+                request: request,
+                ticketQtt: ticketQtt,
                 isVip: true,
                 hearAboutUsFromFriend: true,
                 hearAboutUsFrompublication: true,
                 hearAboutUsFromSocialMedia: true,
                 agreeTheTerms: true
             })
-            //Act and Assertions
+            //Assertions
             //Verifiy if agreement message is correctly
             .get("@agreementText")
                 .should("contain", `I, ${fullName}, wish to buy 2 VIP tickets.`)
@@ -104,6 +107,7 @@ describe("Tickets", () => {
             //Verifiy if Submit Button is not disabled
             .get("@submitButton")
                 .should("not.be.disabled")
+            //Act 
             //Click at the Reset Button
             .get("@resetButton")
                 .click()
@@ -111,18 +115,19 @@ describe("Tickets", () => {
             .get("@submitButton")
                 .should("be.disabled"));
 
-    it("fills mandatory fields using support command", () => 
-        //Arrange
+    it("fills mandatory fields using support command", () =>         
         cy
+            //Arrange
             .fillMandatoryFields({
                 firstName: firstName,
                 lastName: lastName,
                 email: email
             })
-            //Act and Assertions
+            //Assertions
             .get("@submitButton")
                 .should("not.be.disabled")
             .get("@agreeCheckBox")
+            //Act
                 .uncheck()
             .get("@submitButton")
                 .should("be.disabled"));
